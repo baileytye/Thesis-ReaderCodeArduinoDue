@@ -166,10 +166,10 @@ environment/project/io.sloeber.core.toolChain.release.1669367889/A.EXTRA.TIME.DT
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.EXTRA.TIME.DTS/value=3600
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.EXTRA.TIME.LOCAL/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.EXTRA.TIME.LOCAL/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1669367889/A.EXTRA.TIME.LOCAL/value=1525356873
+environment/project/io.sloeber.core.toolChain.release.1669367889/A.EXTRA.TIME.LOCAL/value=1525358948
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.EXTRA.TIME.UTC/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.EXTRA.TIME.UTC/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1669367889/A.EXTRA.TIME.UTC/value=1525378473
+environment/project/io.sloeber.core.toolChain.release.1669367889/A.EXTRA.TIME.UTC/value=1525380548
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.EXTRA.TIME.ZONE/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.EXTRA.TIME.ZONE/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.EXTRA.TIME.ZONE/value=-25200
@@ -208,7 +208,7 @@ environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.AR.PAT
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.AR.PATTERN/value="${A.COMPILER.PATH}${A.COMPILER.AR.CMD}" ${A.COMPILER.AR.FLAGS} ${A.COMPILER.AR.EXTRA_FLAGS} "${A.ARCHIVE_FILE_PATH}" "${A.OBJECT_FILE}"
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.C.COMBINE.PATTERN.1/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.C.COMBINE.PATTERN.1/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.C.COMBINE.PATTERN.1/value="C\:\\sloeber\\/arduinoPlugin/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/arm-none-eabi-gcc" -mcpu\=cortex-m3 -mthumb -Os -Wl,--gc-sections "-TC\:\\sloeber\\arduinoPlugin\\packages\\arduino\\hardware\\sam\\1.6.11\\variants\\arduino_due_x/linker_scripts/gcc/flash.ld" "-Wl,-Map,C\:/Users/Labtop/Documents/sloeber-workspace/Thesis_ReaderCodeArduinoDue/Release/Thesis_ReaderCodeArduinoDue.map" -o "C\:/Users/Labtop/Documents/sloeber-workspace/Thesis_ReaderCodeArduinoDue/Release/Thesis_ReaderCodeArduinoDue.elf" "-LC\:/Users/Labtop/Documents/sloeber-workspace/Thesis_ReaderCodeArduinoDue/Release" -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--entry\=Reset_Handler -Wl,--unresolved-symbols\=report-all -Wl,--warn-common -Wl,--warn-section-align -Wl,--start-group -u _sbrk -u link -u _close -u _fstat -u _isatty -u _lseek -u _read -u _write -u _exit -u kill -u _getpid 
+environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.C.COMBINE.PATTERN.1/value="C\:\\sloeber\\/arduinoPlugin/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/arm-none-eabi-gcc" -mcpu\=cortex-m3 -mthumb -Os -Wl,--gc-sections "-TC\:\\sloeber\\arduinoPlugin\\packages\\arduino\\hardware\\sam\\1.6.11\\variants\\arduino_due_x/linker_scripts/gcc/flash.ld" "-Wl,-Map,C\:\\Users\\Labtop\\Documents\\sloeber-workspace\\Thesis_ReaderCodeArduinoDue/Release/Thesis_ReaderCodeArduinoDue.map" -o "C\:\\Users\\Labtop\\Documents\\sloeber-workspace\\Thesis_ReaderCodeArduinoDue/Release/Thesis_ReaderCodeArduinoDue.elf" "-LC\:\\Users\\Labtop\\Documents\\sloeber-workspace\\Thesis_ReaderCodeArduinoDue/Release" -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--entry\=Reset_Handler -Wl,--unresolved-symbols\=report-all -Wl,--warn-common -Wl,--warn-section-align -Wl,--start-group -u _sbrk -u link -u _close -u _fstat -u _isatty -u _lseek -u _read -u _write -u _exit -u kill -u _getpid 
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.C.COMBINE.PATTERN.2/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.C.COMBINE.PATTERN.2/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.C.COMBINE.PATTERN.2/value=\ "C\:\\sloeber\\arduinoPlugin\\packages\\arduino\\hardware\\sam\\1.6.11\\variants\\arduino_due_x/libsam_sam3x8e_gcc_rel.a" 
@@ -253,7 +253,7 @@ environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.OBJCOP
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.OBJCOPY.EEP.PATTERN/value=
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.OBJCOPY.HEX.PATTERN.1/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.OBJCOPY.HEX.PATTERN.1/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.OBJCOPY.HEX.PATTERN.1/value="C\:\\sloeber\\/arduinoPlugin/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/arm-none-eabi-objcopy" -O binary "C\:/Users/Labtop/Documents/sloeber-workspace/Thesis_ReaderCodeArduinoDue/Release/Thesis_ReaderCodeArduinoDue.elf" "C\:/Users/Labtop/Documents/sloeber-workspace/Thesis_ReaderCodeArduinoDue/Release/Thesis_ReaderCodeArduinoDue.bin"
+environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.OBJCOPY.HEX.PATTERN.1/value="C\:\\sloeber\\/arduinoPlugin/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/arm-none-eabi-objcopy" -O binary "C\:\\Users\\Labtop\\Documents\\sloeber-workspace\\Thesis_ReaderCodeArduinoDue/Release/Thesis_ReaderCodeArduinoDue.elf" "C\:\\Users\\Labtop\\Documents\\sloeber-workspace\\Thesis_ReaderCodeArduinoDue/Release/Thesis_ReaderCodeArduinoDue.bin"
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.OBJCOPY.HEX.PATTERN/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.OBJCOPY.HEX.PATTERN/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.OBJCOPY.HEX.PATTERN/value=${A.RECIPE.OBJCOPY.BIN.PATTERN}
@@ -277,7 +277,7 @@ environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.S.O.PA
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.S.O.PATTERN/value="${A.COMPILER.PATH}${A.COMPILER.S.CMD}" ${A.COMPILER.S.FLAGS} -mcpu\=${A.BUILD.MCU} -mthumb -DF_CPU\=${A.BUILD.F_CPU} -DARDUINO\=${A.RUNTIME.IDE.VERSION} -DARDUINO_${A.BUILD.BOARD} -DARDUINO_ARCH_${A.BUILD.ARCH} ${A.COMPILER.S.EXTRA_FLAGS} ${A.BUILD.EXTRA_FLAGS} ${A.COMPILER.LIBSAM.C.FLAGS} ${A.INCLUDES} "${A.SOURCE_FILE}" -o "${A.OBJECT_FILE}"
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.SIZE.PATTERN.1/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.SIZE.PATTERN.1/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.SIZE.PATTERN.1/value="C\:\\sloeber\\/arduinoPlugin/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/arm-none-eabi-size" -A "C\:/Users/Labtop/Documents/sloeber-workspace/Thesis_ReaderCodeArduinoDue/Release/Thesis_ReaderCodeArduinoDue.elf"
+environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.SIZE.PATTERN.1/value="C\:\\sloeber\\/arduinoPlugin/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/arm-none-eabi-size" -A "C\:\\Users\\Labtop\\Documents\\sloeber-workspace\\Thesis_ReaderCodeArduinoDue/Release/Thesis_ReaderCodeArduinoDue.elf"
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.SIZE.PATTERN/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.SIZE.PATTERN/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1669367889/A.RECIPE.SIZE.PATTERN/value="${A.COMPILER.PATH}${A.COMPILER.SIZE.CMD}" -A "${A.BUILD.PATH}/${A.BUILD.PROJECT_NAME}.elf"
@@ -436,7 +436,7 @@ environment/project/io.sloeber.core.toolChain.release.1669367889/JANTJE.COM_PORT
 environment/project/io.sloeber.core.toolChain.release.1669367889/JANTJE.COM_PORT/value=COM3
 environment/project/io.sloeber.core.toolChain.release.1669367889/JANTJE.ECLIPSE_LOCATION/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1669367889/JANTJE.ECLIPSE_LOCATION/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1669367889/JANTJE.ECLIPSE_LOCATION/value=${eclipse_home}
+environment/project/io.sloeber.core.toolChain.release.1669367889/JANTJE.ECLIPSE_LOCATION/value=C\:\\sloeber\\
 environment/project/io.sloeber.core.toolChain.release.1669367889/JANTJE.EXTRA.ALL/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1669367889/JANTJE.EXTRA.ALL/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1669367889/JANTJE.EXTRA.ALL/value=

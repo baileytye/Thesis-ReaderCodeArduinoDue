@@ -1,7 +1,7 @@
 /* File: Reader.ino
  * Created by: Bailey Tye
  * Date Created: 3/22/2018
- * Last Edited: 4/2/2018
+ * Last Edited: 5/3/2018
  */
 
 
@@ -12,6 +12,12 @@
 
 //-----------------------DEFINES------------------------//
 #define SIGNAL_PIN A0
+
+#define DATA_CONTROL_PIN 52
+
+#define POWER_CONTROL_PIN 53
+
+
 
 //ADC value of offset you consider to be a rising edge
 #define RISING_OFFSET 35
@@ -26,7 +32,7 @@
 #define START_INTERVAL_OFFSET 1362
 
 //Number of bits to receive
-#define BYTES_TO_RECEIVE 12
+#define BYTES_TO_RECEIVE 4
 
 //Set to 1 to read 60 ADC values and print them to the monitor
 #define READ_60 0
@@ -56,6 +62,9 @@ void setup()
 
 //Set resolution to 12 bits
 	analogReadResolution(12);
+	pinMode(SIGNAL_PIN, INPUT);
+	pinMode(DATA_CONTROL_PIN, OUTPUT);
+	pinMode(POWER_CONTROL_PIN, OUTPUT);
 
 }
 
@@ -91,6 +100,23 @@ void loop()
 	} else {
 
 		while(1){
+
+//			//Turn off data signal pass-through
+//			digitalWrite(DATA_CONTROL_PIN, LOW);
+//
+//			//Turn on function generator for power transmission
+//			digitalWrite(POWER_CONTROL_PIN, HIGH);
+//
+//			//Wait enough time to charge the tag
+//			delay(5000);
+//
+//			//Turn off function generator
+//			digitalWrite(POWER_CONTROL_PIN, LOW);
+//
+			//Turn on data signal pass-through
+			digitalWrite(DATA_CONTROL_PIN, HIGH);
+
+
 			//Wait till a rising edge is detected
 			Serial.println("//---------Waiting for Data--------// ");
 			waitForRising();
