@@ -23,16 +23,16 @@
 #define RISING_OFFSET 35
 
 //Variance of readings[] you consider to be on
-#define VARIANCE_THRESHOLD 100
+#define VARIANCE_THRESHOLD 150
 
 //Interval between bits of data
-#define BIT_INTERVAL 1277
+#define BIT_INTERVAL 1262
 
 //Start interval offset
 #define START_INTERVAL_OFFSET 1362
 
 //Number of bits to receive
-#define BYTES_TO_RECEIVE 4
+#define BYTES_TO_RECEIVE 5
 
 //Set to 1 to read 60 ADC values and print them to the monitor
 #define READ_60 0
@@ -100,73 +100,88 @@ void loop()
 	} else {
 
 		while(1){
+			//Reset data
+			for(int i = 0; i < BYTES_TO_RECEIVE; i++){
+				data[i] = 0;
+			}
 
-//			//Turn off data signal pass-through
-//			digitalWrite(DATA_CONTROL_PIN, LOW);
-//
-//			//Turn on function generator for power transmission
-//			digitalWrite(POWER_CONTROL_PIN, HIGH);
-//
-//			//Wait enough time to charge the tag
-//			delay(5000);
-//
-//			//Turn off function generator
-//			digitalWrite(POWER_CONTROL_PIN, LOW);
-//
+
+			Serial.println("//------ Sending Power--------//");
+			//Turn off data signal pass-through
+			digitalWrite(DATA_CONTROL_PIN, LOW);
+
+			//Turn on function generator for power transmission
+			digitalWrite(POWER_CONTROL_PIN, HIGH);
+
+			//Wait enough time to charge the tag
+			delay(5000);
+
+			//Turn off function generator
+			digitalWrite(POWER_CONTROL_PIN, LOW);
+
 			//Turn on data signal pass-through
 			digitalWrite(DATA_CONTROL_PIN, HIGH);
 
+			Serial.println("//--------Letting OP AMP settle-------//");
 
-			//Wait till a rising edge is detected
-			Serial.println("//---------Waiting for Data--------// ");
-			waitForRising();
-			startTime = micros();
+			delay(100);
 
-			//Serial.println(readings[1] - readings[0]);
+			while(1){
+				//Wait till a rising edge is detected
+				Serial.println("//---------Waiting for Data--------// ");
+				waitForRising();
+				startTime = micros();
 
-			//Make sure its real
-			readings[0] = analogRead(SIGNAL_PIN);
-			readings[1] = analogRead(SIGNAL_PIN);
-			readings[2] = analogRead(SIGNAL_PIN);
-			readings[3] = analogRead(SIGNAL_PIN);
-			readings[4] = analogRead(SIGNAL_PIN);
-			readings[5] = analogRead(SIGNAL_PIN);
-			readings[6] = analogRead(SIGNAL_PIN);
-			readings[7] = analogRead(SIGNAL_PIN);
-			readings[8] = analogRead(SIGNAL_PIN);
-			readings[9] = analogRead(SIGNAL_PIN);
-			readings[10] = analogRead(SIGNAL_PIN);
-			readings[11] = analogRead(SIGNAL_PIN);
+				//Serial.println(readings[1] - readings[0]);
+
+				//Make sure its real
+				readings[0] = analogRead(SIGNAL_PIN);
+				readings[1] = analogRead(SIGNAL_PIN);
+				readings[2] = analogRead(SIGNAL_PIN);
+				readings[3] = analogRead(SIGNAL_PIN);
+				readings[4] = analogRead(SIGNAL_PIN);
+				readings[5] = analogRead(SIGNAL_PIN);
+				readings[6] = analogRead(SIGNAL_PIN);
+				readings[7] = analogRead(SIGNAL_PIN);
+				readings[8] = analogRead(SIGNAL_PIN);
+				readings[9] = analogRead(SIGNAL_PIN);
+				readings[10] = analogRead(SIGNAL_PIN);
+				readings[11] = analogRead(SIGNAL_PIN);
 
 
 
-			if(getVariance(readings, 12) < VARIANCE_THRESHOLD){
-				continue;
+				//Noise detected, not data
+				if(getVariance(readings, 12) < VARIANCE_THRESHOLD){
+					continue;
+				}
+
+
+				//Wait till data starts
+				while((micros() - startTime) < (START_INTERVAL_OFFSET));
+
+				//Read data
+				readData();
+
+
+				for(int i = 0; i < BYTES_TO_RECEIVE;i++){
+					Serial.print(data[i],HEX);
+					Serial.print(" ");
+				}
+
+				Serial.print("\n");
+
+
+				for(int i = 0; i < BYTES_TO_RECEIVE; i++){
+					Serial.print(char(data[i]));
+				}
+
+				Serial.print("\n");
+
+				Serial.println("//-------- Resetting--------//");
+
+				delay(5000);
+				break;
 			}
-
-			//Serial.println(getVariance(readings, 6));
-
-			//Wait till data starts
-			while((micros() - startTime) < (START_INTERVAL_OFFSET));
-
-			//Read data
-			readData();
-
-
-			for(int i = 0; i < BYTES_TO_RECEIVE;i++){
-				Serial.print(data[i],HEX);
-				Serial.print(" ");
-			}
-
-			Serial.print("\n");
-
-
-			for(int i = 0; i < BYTES_TO_RECEIVE; i++){
-				Serial.print(char(data[i]));
-			}
-
-			Serial.print("\n");
-			delay(500);
 		}
 
 	}
