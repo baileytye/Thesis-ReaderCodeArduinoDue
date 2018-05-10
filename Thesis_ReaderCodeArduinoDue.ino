@@ -37,6 +37,8 @@
 //Set to 1 to read 60 ADC values and print them to the monitor
 #define READ_60 0
 
+#define BER_TEST 0
+
 
 unsigned int readings[15];
 
@@ -97,6 +99,22 @@ void loop()
 
 		//Only execute once
 		while(1);
+	} else if(BER_TEST){
+
+		//Turn on power
+
+		//Turn off power
+
+		//Wait for data
+
+		//Check data
+
+		//Repeat X times
+
+
+
+
+
 	} else {
 
 		while(1){
