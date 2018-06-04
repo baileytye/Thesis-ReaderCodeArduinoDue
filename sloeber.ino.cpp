@@ -2,7 +2,7 @@
 //This is a automatic generated file
 //Please do not modify this file
 //If you touch this file your change will be overwritten during the next build
-//This file has been generated on 2018-05-31 14:47:34
+//This file has been generated on 2018-06-04 16:31:53
 
 #include "Arduino.h"
 #include "Arduino.h"
@@ -20,6 +20,7 @@ void sendPower(int time);
 void BERTest();
 void continuousReadTest();
 void read60();
+double calculateVarianceAverage(unsigned int val);
 
 #include "Thesis_ReaderCodeArduinoDue.ino"
 
