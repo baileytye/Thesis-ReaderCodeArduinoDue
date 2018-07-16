@@ -23,7 +23,7 @@
 #define RISING_OFFSET 17
 
 //Variance of readings[] you consider to be on
-#define VARIANCE_THRESHOLD 90
+#define VARIANCE_THRESHOLD 115
 
 //Interval between bits of data
 #define BIT_INTERVAL 1260
@@ -31,8 +31,11 @@
 //Start interval offset
 #define START_INTERVAL_OFFSET 1345
 
-//Number of bits to receive
+//Number of bytes to receive
 #define BYTES_TO_RECEIVE 5
+
+//Multiplier for charge intervals
+#define INTERVAL_MULTIPLIER 250
 
 
 //-----------------------MODES---------------------------//
@@ -41,7 +44,7 @@
 #define READ_60 0
 
 //Set to 1 for BER test mode
-#define BER_TEST 1
+#define BER_TEST 0
 
 //-------------------------------------------------------//
 
@@ -51,11 +54,15 @@
 //Set to: 1 for only important messages, 2 for more messages, 3 for all
 #define DEBUG_LEVEL 2
 
-//Distance in feet
-#define DISTANCE 4
+//Distance in meters
+#define DISTANCE 1
 
 //User power adjustment to counteract the pipe detuning effect
-#define PIPE_POWER_ADJUST 2.8
+#define PIPE_POWER_ADJUST 1
+
+#define INTERVAL_ADJUST 2
+
+#define STARTUP_ADJUST 1
 
 //Number of runs for the BER test
 #define NUMBER_OF_TESTS 500
@@ -243,6 +250,7 @@ double getVariance(unsigned int array[], int length){
 //Check for errors during BER test
 void checkErrors(int state){
 	int mask = 1;
+	int errors = 0;
 
 	switch(state){
 	case 1:
@@ -250,6 +258,7 @@ void checkErrors(int state){
 			for(int j = 0; j < 8; j++){
 				if((data[i] & (mask << j)) != (BER_STATE_1[i] & (mask << j))){
 					bitErrors++;
+					errors = 1;
 				}
 			}
 		}
@@ -259,6 +268,7 @@ void checkErrors(int state){
 			for(int j = 0; j < 8; j++){
 				if((data[i] & (mask << j)) != (BER_STATE_2[i] & (mask << j))){
 					bitErrors++;
+					errors = 1;
 				}
 			}
 		}
@@ -268,6 +278,7 @@ void checkErrors(int state){
 			for(int j = 0; j < 8; j++){
 				if((data[i] & (mask << j)) != (BER_STATE_3[i] & (mask << j))){
 					bitErrors++;
+					errors = 1;
 				}
 			}
 		}
@@ -277,6 +288,7 @@ void checkErrors(int state){
 			for(int j = 0; j < 8; j++){
 				if((data[i] & (mask << j)) != (BER_STATE_4[i] & (mask << j))){
 					bitErrors++;
+					errors = 1;
 				}
 			}
 		}
@@ -286,6 +298,7 @@ void checkErrors(int state){
 			for(int j = 0; j < 8; j++){
 				if((data[i] & (mask << j)) != (BER_STATE_5[i] & (mask << j))){
 					bitErrors++;
+					errors = 1;
 				}
 			}
 		}
@@ -295,6 +308,7 @@ void checkErrors(int state){
 			for(int j = 0; j < 8; j++){
 				if((data[i] & (mask << j)) != (BER_STATE_6[i] & (mask << j))){
 					bitErrors++;
+					errors = 1;
 				}
 			}
 		}
@@ -307,6 +321,13 @@ void checkErrors(int state){
 		Serial.print("Total Bit Errors: ");
 		Serial.print(bitErrors);
 		Serial.print("\n");
+
+		if(errors == 1){
+			Serial.print("ERROR IN DATA, EXPECTED STATE: ");
+			Serial.print(state);
+			Serial.print("\n");
+
+		}
 	}
 
 	return;
@@ -358,22 +379,24 @@ void BERTest(){
 	int numberOfTests = NUMBER_OF_TESTS;
 	int testsRemaining = numberOfTests;
 
-	int sendTime = (int)((DISTANCE*DISTANCE*DISTANCE)*20.0 * PIPE_POWER_ADJUST);
-	uint32_t time = millis();
+	int sendTime = (int)((DISTANCE*DISTANCE*DISTANCE*DISTANCE) * INTERVAL_MULTIPLIER * PIPE_POWER_ADJUST * INTERVAL_ADJUST);
+
 
 
 
 	if(DEBUG_LEVEL >= 1){
 		Serial.print("Recharge time between tests: ");
-		Serial.print((int)((DISTANCE*DISTANCE*DISTANCE)*20.0* PIPE_POWER_ADJUST));
+		Serial.print((int)((DISTANCE*DISTANCE*DISTANCE*DISTANCE) * INTERVAL_MULTIPLIER * PIPE_POWER_ADJUST * INTERVAL_ADJUST));
 		Serial.print("ms\nInitial charge set to: ");
-		Serial.print(600 * DISTANCE * DISTANCE * PIPE_POWER_ADJUST);
+		Serial.print(7000  * DISTANCE * DISTANCE * DISTANCE * PIPE_POWER_ADJUST * STARTUP_ADJUST);
 		Serial.print("ms\nDistance: ");
 		Serial.print(DISTANCE);
-		Serial.print("ft\nTimer started...\n//------ Sending Initial Power--------//\n");
+		Serial.print("m\nTimer started...\n//------ Sending Initial Power--------//\n");
 	}
 
-	sendPower(400 * DISTANCE * DISTANCE * PIPE_POWER_ADJUST);
+	uint32_t time = millis();
+
+	sendPower(7000 * DISTANCE * DISTANCE *DISTANCE* PIPE_POWER_ADJUST * STARTUP_ADJUST);
 
 
 	while(1){
@@ -455,6 +478,8 @@ void BERTest(){
 			testsRemaining--;
 			test++;
 
+			delay(10);
+
 			break;
 		}
 		if(testsRemaining == 0){
@@ -489,7 +514,13 @@ void BERTest(){
 				Serial.print("0");
 			Serial.print(timeS);
 			Serial.print("\n");
-			Serial.print("//----------------------------------------//");
+			Serial.print("Recharge time between tests: ");
+			Serial.print((int)((DISTANCE*DISTANCE*DISTANCE*DISTANCE) * INTERVAL_MULTIPLIER * PIPE_POWER_ADJUST * INTERVAL_ADJUST));
+			Serial.print("ms\nInitial charge set to: ");
+			Serial.print(7000 * DISTANCE * DISTANCE * DISTANCE * PIPE_POWER_ADJUST * STARTUP_ADJUST);
+			Serial.print("ms\nDistance: ");
+			Serial.print(DISTANCE);
+			Serial.print("m\n//----------------------------------------//\n");
 			while(1);
 		}
 	}
@@ -500,21 +531,22 @@ void continuousReadTest(){
 
 	uint32_t startTime;
 
-	int sendTime = (int)((DISTANCE*DISTANCE*DISTANCE)*20.0 * PIPE_POWER_ADJUST);
+	int sendTime = (int)((DISTANCE*DISTANCE*DISTANCE*DISTANCE) * INTERVAL_MULTIPLIER * PIPE_POWER_ADJUST * INTERVAL_ADJUST);
+
+
 
 
 	if(DEBUG_LEVEL >= 1){
 		Serial.print("Recharge time between tests: ");
-		Serial.print((int)((DISTANCE*DISTANCE*DISTANCE)*20.0* PIPE_POWER_ADJUST));
+		Serial.print((int)((DISTANCE*DISTANCE*DISTANCE*DISTANCE) * INTERVAL_MULTIPLIER * PIPE_POWER_ADJUST * INTERVAL_ADJUST));
 		Serial.print("ms\nInitial charge set to: ");
-		Serial.print(600 * DISTANCE * DISTANCE * PIPE_POWER_ADJUST);
+		Serial.print(7000  * DISTANCE * DISTANCE * DISTANCE * PIPE_POWER_ADJUST * STARTUP_ADJUST);
 		Serial.print("ms\nDistance: ");
 		Serial.print(DISTANCE);
-		Serial.print("ft\n");
-		Serial.println("//------ Sending Initial Power--------//");
+		Serial.print("m\nTimer started...\n//------ Sending Initial Power--------//\n");
 	}
 
-	sendPower(600 * DISTANCE * DISTANCE * PIPE_POWER_ADJUST);
+	sendPower(7000 * DISTANCE * DISTANCE *DISTANCE* PIPE_POWER_ADJUST * STARTUP_ADJUST);
 
 
 
@@ -526,7 +558,7 @@ void continuousReadTest(){
 		}
 
 
-		if(DEBUG_LEVEL >= 2)
+		if(DEBUG_LEVEL >= 3)
 			Serial.println("//------ Sending Power--------//");
 
 		sendPower(sendTime);
@@ -537,8 +569,9 @@ void continuousReadTest(){
 
 		while(1){
 			//Wait till a rising edge is detected
-			if(DEBUG_LEVEL >= 2)
+			if(DEBUG_LEVEL >= 3)
 				Serial.println("//------Waiting for Data---- ---// ");
+
 			waitForRising();
 			startTime = micros();
 
@@ -573,12 +606,15 @@ void continuousReadTest(){
 			readData();
 
 			//Print received data to serial
-			//Print received data to serial
-			if(DEBUG_LEVEL >= 2)
+			if(DEBUG_LEVEL >= 2) {
 				printReceivedData();
+				Serial.print("\n");
+			}
 
 			if(DEBUG_LEVEL >= 3)
 				Serial.println("//-------- Restarting--------//");
+
+			delay(10);
 
 			break;
 		}
