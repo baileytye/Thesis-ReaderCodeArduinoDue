@@ -1,16 +1,17 @@
 # Thesis-ReaderCodeArduinoDue
 
-Reader code for the Arduino Due.
+Reader code for the Arduino Due. This code requires an ADC of 200kps and will not work on other Arduinos. The Arduino Due must be paired with the reader circuit, function generator, current amplifier, DC power supply, oscilloscope, and reader power/data coils. 
 
 ## Modes:
 #### 1. Read 60 ADC readings back-to-back (READ_60)
-
+This mode is used to read 60 consecutive ADC values. This was mainly used to graph the incoming data signal to measure amplitude. Currently this does not wait for a rising edge, it just reads the first 60 ADC readings as soon as it starts. That means you must set the tag to continuos transmit mode.
 
 #### 2. Bit Error Rate test mode (BER_TEST)
-
+This mode allows you to run bit error tests with the tag. This reuires the tag to be in BER mode and must be drained before tests begin. (completely drain battery caps, and Vcc on tag so that it is not sitting in deep sleep. This is to sync the states with the reader.)
+To correctly use BER mode, make sure to set the user input parameters to the correct values.
 
 #### 3. Continuous Read mode (When READ_60 == 0, and BER_TEST == 0)
-
+This mode allows the reader to continually charge and read the tag. This is useful when you are using the tag in sensor mode and want to continually probe the results. 
 
 ## User inputs:
 There are many variables a user can change to effect results:
