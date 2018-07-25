@@ -25,6 +25,7 @@ Adjust this to increase or decrease messages being sent to the monitor.
 1. - 'Mode set display'
    - 'User inputs display (recharge times, distance)'
    - 'Initial power send alert'
+   - 'Received data in HEX/ASCII'
           
 2. - 'Total number of bit errors at the end of each test run'
    - 'Data where error occured warning'
