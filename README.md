@@ -60,3 +60,19 @@ To read data the following steps are taken:
 5. Wait till the next bit peak which is spaced by BIT_INTERVAL. This is due to the ringing caused on the reader, the bits must be this far away for the signal to stablize low enough for a zero to be read as a zero. 
 6. Repeat steps 3-5 8 times to create a full byte.
 7. Repeat steps 1-6 BYTES_TO_RECEIVE times.
+
+
+## System Variables
+These should only be changed if you know what you are doing, and need to adjust timings or variance thresholds.
+
+#### 1. Rising Offset
+
+#### 2. Variance Threshold
+
+#### 3. Bit Interval
+
+#### 4. Start interval Offset
+
+#### 5. Bytes to Receive
+
+
