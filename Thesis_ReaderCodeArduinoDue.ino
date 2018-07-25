@@ -1,12 +1,13 @@
 /* File: Reader.ino
  * Created by: Bailey Tye
  * Date Created: 3/22/2018
- * Last Edited: 5/31/2018
+ * Last Edited: 7/25/2018
  */
 
 
 
 #include "Arduino.h"
+#include "math.h"
 
 
 
@@ -40,7 +41,9 @@
 
 //-----------------------MODES---------------------------//
 
-//Set to 1 to read 60 ADC values and print them to the monitor
+//Set to 1 to read 60 ADC values and print them to the monitor. This will read only the
+//first 60 values after a rising edge is detected. This is to be used when the tag is
+//continuosly outputting a wave, and you would like to graph the received waveform.
 #define READ_60 0
 
 //Set to 1 for BER test mode
@@ -57,27 +60,39 @@
 //Distance in meters
 #define DISTANCE 1
 
-//User power adjustment to counteract the pipe detuning effect
+//User power adjustment to counteract the pipe detuning effect. This multiplier
+//applies to both interval power, and initial power.
 #define PIPE_POWER_ADJUST 1
 
-#define INTERVAL_ADJUST 2
+//Use to adjust just the charge time between each read
+#define INTERVAL_ADJUST 5
 
-#define STARTUP_ADJUST 1
+//Use to adjust the initial charge given before testing begins
+#define STARTUP_ADJUST 2
 
-//Number of runs for the BER test
+//Number of iterations for the BER test
 #define NUMBER_OF_TESTS 500
 //-------------------------------------------------------//
 
 
 //-------------------GLOBAL VERIABLES--------------------//
+
+//Array to store the ADC readings as they are read in
 unsigned int readings[15];
 
+//Array to store data bytes as they are received. Adjust BYTES_TO_RECEIVE
+//to adjust number of bytes read on each power cycle.
 byte data[BYTES_TO_RECEIVE];
 
+//Average variance of a one calculated during BER testing. Each i'th element of
+//the array stores the average variance of test number i.
 unsigned int averageOfOne[NUMBER_OF_TESTS];
 
+//Average variance of a zero calculated during BER testing. Each i'th element of
+//the array stores the average variance of test number i.
 unsigned int averageOfZero[NUMBER_OF_TESTS];
 
+//Stores the number of the current test.
 unsigned int test = 0;
 
 //BER states to test
@@ -88,7 +103,7 @@ byte BER_STATE_4[] = {0xF0, 0xF0, 0xF0, 0xF0, 0x80};
 byte BER_STATE_5[] = {0x6F, 0x70, 0x65, 0x6E, 0x80};
 byte BER_STATE_6[] = {0x21, 0x40, 0x23, 0x25, 0x00};
 
-//total bit errors
+//Total bit errors
 int bitErrors = 0;
 //--------------------------------------------------------//
 
@@ -157,7 +172,7 @@ void waitForRising(){
 
 }
 
-//Reads a byte bits of data
+//Reads a byte of data
 void readData(){
 
 	uint32_t startTime;
@@ -192,6 +207,7 @@ void readData(){
 
 		variance = getVariance(readings, 15);
 
+		//Calculate average variance
 		if(variance > VARIANCE_THRESHOLD){
 			data[j] |= 1 << (7 - i);
 			one += variance;
@@ -333,7 +349,7 @@ void checkErrors(int state){
 	return;
 }
 
-//Print received data to serial, prints in hex and ascii
+//Print received data to serial, prints in hex and ASCII
 void printReceivedData(){
 
 	Serial.print("0x");
@@ -374,11 +390,19 @@ void sendPower(int time){
 //Perform BER test
 void BERTest(){
 
+	//start time used to wait between peaks in analog data
 	uint32_t startTime;
+
+	//Starting state
 	int state = 1;
+
+	//NUmber of tests to run
 	int numberOfTests = NUMBER_OF_TESTS;
+
+	//Number of tests remaining
 	int testsRemaining = numberOfTests;
 
+	//Interval charge time
 	int sendTime = (int)((DISTANCE*DISTANCE*DISTANCE*DISTANCE) * INTERVAL_MULTIPLIER * PIPE_POWER_ADJUST * INTERVAL_ADJUST);
 
 
@@ -396,9 +420,10 @@ void BERTest(){
 
 	uint32_t time = millis();
 
+	//Initial charge time
 	sendPower(7000 * DISTANCE * DISTANCE *DISTANCE* PIPE_POWER_ADJUST * STARTUP_ADJUST);
 
-
+	//Each iteration of this loop is a test iteration
 	while(1){
 
 		//Reset data
@@ -409,11 +434,14 @@ void BERTest(){
 		if(DEBUG_LEVEL >= 3)
 			Serial.println("//--------- Sending Power----------//");
 
+		//Send interval charge
 		sendPower(sendTime);
 
 		//Delay that is synced with tag, to allow the op amp to reset for a moment
 		delay(12);
 
+		//While to stay in loop until data is detected. If noise is detected as rising edge
+		//The loop will continue. If data is received the loop breaks.
 		while(1){
 
 			//Wait till a rising edge is detected
@@ -483,6 +511,8 @@ void BERTest(){
 			break;
 		}
 		if(testsRemaining == 0){
+
+			//Print all relevant information to the monitor
 
 			time = millis() - time;
 			uint32_t timeS = (int)time/1000;
@@ -608,7 +638,15 @@ void continuousReadTest(){
 			//Print received data to serial
 			if(DEBUG_LEVEL >= 2) {
 				printReceivedData();
+				double temp = (data[0] << 8) | data[1];
+				temp = (temp / 1023)*2500;
+				Serial.print("Temperature in mV: ");
+				Serial.print(temp);
 				Serial.print("\n");
+				double celcius = (10.888 - sqrt(sq(-10.888)+4*0.00347*(1777.3-temp)))/(2*-0.00347) + 30;
+				Serial.print("Temperature in degrees celcius: ");
+				Serial.print(celcius);
+				Serial.print("\n\n");
 			}
 
 			if(DEBUG_LEVEL >= 3)
