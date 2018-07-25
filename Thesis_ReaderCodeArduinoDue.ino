@@ -19,6 +19,8 @@
 #define POWER_CONTROL_PIN 53
 
 
+//------------------SYSTEM VARIABLES-------------------//
+//--------------------DO NOT TOUCH---------------------//
 
 //ADC value of offset you consider to be a rising edge
 #define RISING_OFFSET 17
