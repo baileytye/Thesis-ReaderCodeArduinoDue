@@ -66,13 +66,17 @@ To read data the following steps are taken:
 These should only be changed if you know what you are doing, and need to adjust timings or variance thresholds.
 
 #### 1. Rising Offset
+This value represents the offset that is considered to be a rising edge. This is used when the system is waiting for data to come in. You can adjust this higher to maybe avoid more noise, but that could cause you to miss the start bit if it is too weak.
 
 #### 2. Variance Threshold
+This value represents the threshold that is considered a '1' when reading data. You can decrease this value to be able to read much weaker signals, but then you may read noise as a '1'. If the average 0 value is very low however, you can decrease this value to be close to that. 
 
 #### 3. Bit Interval
+This value represents the interval between bits. This should only be changed to align the bit rate with the tag. Once aligned it should not be touched again.
 
 #### 4. Start interval Offset
+This value represents the first offset from the start bit to the first bit. This value is always slightly longer than the bit interval since the start bit read happens slightly earlier than the first peak (where you want to read a period of ADC values).
 
 #### 5. Bytes to Receive
-
+This value represents the number of bytes to receive in a packet transmission (between charge intervals). If you change this value, the tag code must be changed to transmit more bytes. By default this is set to 5 bytes, where the last byte only contains the parity bit.
 
