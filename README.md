@@ -59,8 +59,7 @@ To read data the following steps are taken:
 3. Measure and record the next 15 ADC values. These are spaced by 5us due to the 200kbps sampling rate in the Arduino Due. One period of the data signal is 62.5us, the 15 ADC values are equal to 75 us, slightly more than a period. 
 4. Calculate the average of those values, and then compare each value to that average. The sum of the differences between the value and the average are stored as the 'Variance' of the bit. If that value is greater than VARIANCE_THRESHOLD, then this value is saved as a '1', if not it is saved as a '0'.
 5. Wait till the next bit peak which is spaced by BIT_INTERVAL. This is due to the ringing caused on the reader, the bits must be this far away for the signal to stablize low enough for a zero to be read as a zero. 
-6. Repeat steps 3-5 8 times to create a full byte.
-7. Repeat steps 1-6 BYTES_TO_RECEIVE times.
+6. Repeat steps 3-5 33 times to create a full packet; 4 bytes + parity bit.
 
 
 ## System Variables
